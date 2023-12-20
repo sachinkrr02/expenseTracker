@@ -39,11 +39,12 @@ class MyBarGraph extends StatelessWidget {
     myBarData.initializeBarData();
 
     return BarChart(BarChartData(
-      maxY: 100,
+      maxY: 300,
       minY: 0,
       titlesData: FlTitlesData(
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           bottomTitles: AxisTitles(
               sideTitles: SideTitles(
             showTitles: true,
@@ -60,7 +61,6 @@ class MyBarGraph extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                     backDrawRodData: BackgroundBarChartRodData(
                       show: true,
-                      toY: maxY,
                       color: Colors.grey[200],
                     )),
               ]))

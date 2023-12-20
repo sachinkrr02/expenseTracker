@@ -18,6 +18,14 @@ class _HomePageState extends State<HomePage> {
   final newExpenseNameController = TextEditingController();
   final newExpenseAmountController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+
+    //prepare data on startup
+    Provider.of<ExpenseData>(context, listen: false).prepareData();
+  }
+
 // add new expense
   void addNewExpense() {
     showDialog(
@@ -56,14 +64,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void save() {
-    ExpenseItem newExpense = ExpenseItem(
-      name: newExpenseNameController.text,
-      amount: newExpenseAmountController.text,
-      dateTime: DateTime.now(),
-    );
+  //delete expense
 
-    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
+  void deleteExpense(ExpenseItem expense) {
+    Provider.of<ExpenseData>(context, listen: false).deleteExpense(expense);
+  }
+
+  void save() {
+    if (newExpenseAmountController.text.isNotEmpty &&
+        newExpenseAmountController.text.isNotEmpty) {
+      ExpenseItem newExpense = ExpenseItem(
+        name: newExpenseNameController.text,
+        amount: newExpenseAmountController.text,
+        dateTime: DateTime.now(),
+      );
+
+      Provider.of<ExpenseData>(context, listen: false)
+          .addNewExpense(newExpense);
+    }
 
     Navigator.pop(context);
     clear();
@@ -106,10 +124,11 @@ class _HomePageState extends State<HomePage> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: value.getAllExpenseList().length,
                   itemBuilder: (context, index) => ExpenseTile(
-                        name: value.getAllExpenseList()[index].name,
-                        amount: value.getAllExpenseList()[index].amount,
-                        dateTime: value.getAllExpenseList()[index].dateTime,
-                      )),
+                      name: value.getAllExpenseList()[index].name,
+                      amount: value.getAllExpenseList()[index].amount,
+                      dateTime: value.getAllExpenseList()[index].dateTime,
+                      deleteTapped: (p0) =>
+                          deleteExpense(value.getAllExpenseList()[index]))),
             ],
           )),
     );
