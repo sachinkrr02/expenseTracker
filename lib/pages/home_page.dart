@@ -102,35 +102,49 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseData>(
       builder: (context, value, child) => Scaffold(
-          backgroundColor: Colors.grey[300],
-          floatingActionButton: FloatingActionButton(
-            onPressed: addNewExpense,
-            child: Icon(Icons.add),
+        backgroundColor: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color.fromRGBO(67, 34, 75, 2),
+          onPressed: addNewExpense,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
           ),
-          body: ListView(
-            children: [
-              // weekly summary
-              SizedBox(
-                height: 20,
-              ),
-              ExpenseSummary(startOfWeek: value.startOfWeekDate()),
-              const SizedBox(
-                height: 20,
-              ),
+        ),
+        body: ListView(
+          children: [
+            // weekly summary
+            SizedBox(
+              height: 20,
+            ),
+            ExpenseSummary(startOfWeek: value.startOfWeekDate()),
+            const SizedBox(
+              height: 20,
+            ),
 
-              // expense list
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: value.getAllExpenseList().length,
-                  itemBuilder: (context, index) => ExpenseTile(
-                      name: value.getAllExpenseList()[index].name,
-                      amount: value.getAllExpenseList()[index].amount,
-                      dateTime: value.getAllExpenseList()[index].dateTime,
-                      deleteTapped: (p0) =>
-                          deleteExpense(value.getAllExpenseList()[index]))),
-            ],
-          )),
+            // expense list
+            Container(
+              margin: EdgeInsets.all(15),
+              padding: EdgeInsets.fromLTRB(0, 5, 0, 12),
+              decoration: BoxDecoration(
+                  color: Color.fromRGBO(239, 135, 103, 0.5),
+                  borderRadius: BorderRadius.circular(20)),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: value.getAllExpenseList().length,
+                itemBuilder: (context, index) => ExpenseTile(
+                  name: value.getAllExpenseList()[index].name,
+                  amount: value.getAllExpenseList()[index].amount,
+                  dateTime: value.getAllExpenseList()[index].dateTime,
+                  deleteTapped: (p0) =>
+                      deleteExpense(value.getAllExpenseList()[index]),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -31,10 +31,16 @@ class ExpenseTile extends StatelessWidget {
         ],
       ),
       child: ListTile(
-        title: Text(name),
-        subtitle:
-            Text('${dateTime.day} / ${dateTime.month} / ${dateTime.year}'),
-        trailing: Text(amount),
+        title: Text(
+          name,
+          style: TextStyle(fontSize: 18),
+        ),
+        subtitle: Text('${dateTime.day} / ${dateTime.month} / ${dateTime.year}',
+            style: TextStyle(fontSize: 15)),
+        trailing: Text(
+          '\u{20B9} ' + amount,
+          style: TextStyle(fontSize: 15),
+        ),
       ),
     );
   }

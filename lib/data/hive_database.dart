@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:expense_tracker/main.dart';
 import '../models/expense_item.dart';
 
 class HiveDataBase {
@@ -36,7 +36,8 @@ class HiveDataBase {
     }
 
     //finally lets store in our database
-    _myBox.put("all_data", allExpenseFormatted);
+    _myBox.put("ALL_EXPENSES", allExpenseFormatted);
+    //print(_myBox.get(1));
   }
 
   //read data
@@ -59,7 +60,7 @@ ExpenseItem(name / amount / dateTime),
 ]
 */
 
-    List savedExpenses = _myBox.get("All_expenses") ?? [];
+    List savedExpenses = _myBox.get("ALL_EXPENSES") ?? [];
     List<ExpenseItem> allExpenses = [];
 
     for (int i = 0; i < savedExpenses.length; i++) {
@@ -71,8 +72,11 @@ ExpenseItem(name / amount / dateTime),
 
       // create expense item
 
-      ExpenseItem expense =
-          ExpenseItem(name: name, amount: amount, dateTime: dateTime);
+      ExpenseItem expense = ExpenseItem(
+        name: name,
+        amount: amount,
+        dateTime: dateTime,
+      );
 
       // add expense to overall list of expenses
       allExpenses.add(expense);

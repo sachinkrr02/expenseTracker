@@ -91,49 +91,66 @@ class ExpenseSummary extends StatelessWidget {
     String saturday =
         convertDateTimeToString(startOfWeek.add(const Duration(days: 6)));
     return Consumer<ExpenseData>(
-        builder: (context, value, child) => Column(
+      builder: (context, value, child) => Column(
+        children: [
+// hello
+          Container(
+            padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+            alignment: Alignment.topLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // weekly summary
-                Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Week Total: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        '\$ ' +
-                            caluclateWeekTotal(value, sunday, monday, tuesday,
-                                wednesday, thursday, friday, saturday),
-                      ),
-                    ],
-                  ),
+                const Text(
+                  "Hi!",
+                  style: TextStyle(fontSize: 35, color: Colors.black),
                 ),
-
-                // bar graph
-                SizedBox(
-                  height: 200,
-                  child: MyBarGraph(
-                    maxY: calculateMax(value, sunday, monday, tuesday,
-                        wednesday, thursday, friday, saturday),
-                    sunAmount:
-                        value.calculateDailyExpenseSummary()[sunday] ?? 0,
-                    monAmount:
-                        value.calculateDailyExpenseSummary()[monday] ?? 0,
-                    tueAmount:
-                        value.calculateDailyExpenseSummary()[tuesday] ?? 0,
-                    wedAmount:
-                        value.calculateDailyExpenseSummary()[wednesday] ?? 0,
-                    thurAmount:
-                        value.calculateDailyExpenseSummary()[thursday] ?? 0,
-                    friAmount:
-                        value.calculateDailyExpenseSummary()[friday] ?? 0,
-                    satAmount:
-                        value.calculateDailyExpenseSummary()[saturday] ?? 0,
-                  ),
+                Text(
+                  "Your Daily Expi",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 )
               ],
-            ));
+            ),
+          ),
+
+          // bar graph
+          SizedBox(
+            height: 200,
+            child: MyBarGraph(
+              maxY: calculateMax(value, sunday, monday, tuesday, wednesday,
+                  thursday, friday, saturday),
+              sunAmount: value.calculateDailyExpenseSummary()[sunday] ?? 0,
+              monAmount: value.calculateDailyExpenseSummary()[monday] ?? 0,
+              tueAmount: value.calculateDailyExpenseSummary()[tuesday] ?? 0,
+              wedAmount: value.calculateDailyExpenseSummary()[wednesday] ?? 0,
+              thurAmount: value.calculateDailyExpenseSummary()[thursday] ?? 0,
+              friAmount: value.calculateDailyExpenseSummary()[friday] ?? 0,
+              satAmount: value.calculateDailyExpenseSummary()[saturday] ?? 0,
+            ),
+          ),
+
+          // weekly summary
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 5, 10, 0),
+            child: Row(
+              children: [
+                Text(
+                  'Week Total: ',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                Text(
+                  '\u{20B9} ' +
+                      caluclateWeekTotal(value, sunday, monday, tuesday,
+                          wednesday, thursday, friday, saturday),
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -38,34 +38,54 @@ class MyBarGraph extends StatelessWidget {
         satAmount: satAmount);
     myBarData.initializeBarData();
 
-    return BarChart(BarChartData(
-      maxY: 300,
-      minY: 0,
-      titlesData: FlTitlesData(
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: getBottomTitles,
-          ))),
-      gridData: FlGridData(show: false),
-      borderData: FlBorderData(show: false),
-      barGroups: myBarData.barData
-          .map((data) => BarChartGroupData(x: data.x, barRods: [
-                BarChartRodData(
-                    toY: data.y,
-                    color: Colors.grey[800],
-                    width: 25,
-                    borderRadius: BorderRadius.circular(4),
-                    backDrawRodData: BackgroundBarChartRodData(
-                      show: true,
-                      color: Colors.grey[200],
-                    )),
-              ]))
-          .toList(),
-    ));
+    return Scaffold(
+      body: Container(
+        margin: EdgeInsets.all(15),
+        padding: EdgeInsets.fromLTRB(0, 5, 0, 12),
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(67, 34, 75, 2),
+            borderRadius: BorderRadius.circular(20)),
+        child: BarChart(
+          BarChartData(
+            maxY: 300,
+            minY: 0,
+            titlesData: FlTitlesData(
+                topTitles:
+                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                leftTitles:
+                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles:
+                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: getBottomTitles,
+                ))),
+            gridData: FlGridData(show: false),
+            borderData: FlBorderData(show: false),
+            barGroups: myBarData.barData
+                .map(
+                  (data) => BarChartGroupData(
+                    x: data.x,
+                    barRods: [
+                      BarChartRodData(
+                        toY: data.y,
+                        color: Colors.deepOrange,
+                        width: 20,
+                        borderRadius: BorderRadius.circular(7),
+                        backDrawRodData: BackgroundBarChartRodData(
+                          show: true,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      ),
+    );
   }
 }
 
