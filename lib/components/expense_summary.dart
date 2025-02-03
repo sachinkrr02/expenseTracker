@@ -1,4 +1,5 @@
 import 'package:expense_tracker/barGraph/bar_garph.dart';
+import 'package:expense_tracker/dasboard/dashboard.dart';
 import 'package:expense_tracker/data/expense_data.dart';
 import 'package:expense_tracker/dateTime/date_time_helper.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class ExpenseSummary extends StatelessWidget {
     required this.startOfWeek,
   });
 
-  //calculte max amount in bar graph
+  // Calculate max amount for the bar graph
   double calculateMax(
     ExpenseData value,
     String sunday,
@@ -22,28 +23,24 @@ class ExpenseSummary extends StatelessWidget {
     String friday,
     String saturday,
   ) {
-    double? max = 100;
-
     List<double> values = [
-      value.calculateDailyExpenseSummary()[sunday] ?? 0,
-      value.calculateDailyExpenseSummary()[monday] ?? 0,
-      value.calculateDailyExpenseSummary()[tuesday] ?? 0,
-      value.calculateDailyExpenseSummary()[wednesday] ?? 0,
-      value.calculateDailyExpenseSummary()[thursday] ?? 0,
-      value.calculateDailyExpenseSummary()[friday] ?? 0,
-      value.calculateDailyExpenseSummary()[saturday] ?? 0,
+      value.calculateDailyExpenseSummary()[sunday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[monday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[tuesday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[wednesday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[thursday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[friday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[saturday] ?? 0.0,
     ];
 
-    //sort from smallest to largest
+    // Sort from smallest to largest
     values.sort();
-
-    max = values.last * 1.1;
-
+    double max = values.last * 1.1;
     return max == 0 ? 100 : max;
   }
 
-// calculate the week total
-  String caluclateWeekTotal(
+  // Calculate the total weekly expenses
+  String calculateWeekTotal(
     ExpenseData value,
     String sunday,
     String monday,
@@ -53,31 +50,26 @@ class ExpenseSummary extends StatelessWidget {
     String friday,
     String saturday,
   ) {
-    double? max = 100;
-
     List<double> values = [
-      value.calculateDailyExpenseSummary()[sunday] ?? 0,
-      value.calculateDailyExpenseSummary()[monday] ?? 0,
-      value.calculateDailyExpenseSummary()[tuesday] ?? 0,
-      value.calculateDailyExpenseSummary()[wednesday] ?? 0,
-      value.calculateDailyExpenseSummary()[thursday] ?? 0,
-      value.calculateDailyExpenseSummary()[friday] ?? 0,
-      value.calculateDailyExpenseSummary()[saturday] ?? 0,
+      value.calculateDailyExpenseSummary()[sunday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[monday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[tuesday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[wednesday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[thursday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[friday] ?? 0.0,
+      value.calculateDailyExpenseSummary()[saturday] ?? 0.0,
     ];
 
-    double total = 0;
-    for (int i = 0; i < values.length - 1; i++) {
-      total += values[i];
-    }
+    double total = values.fold(0.0, (sum, element) => sum + element);
     return total.toStringAsFixed(2);
   }
 
   @override
   Widget build(BuildContext context) {
-// get yymmdd for each day of this week
+    double width = MediaQuery.of(context).size.width;
 
-    String sunday =
-        convertDateTimeToString(startOfWeek.add(const Duration(days: 0)));
+    // Get formatted date strings for each day of the week
+    String sunday = convertDateTimeToString(startOfWeek);
     String monday =
         convertDateTimeToString(startOfWeek.add(const Duration(days: 1)));
     String tuesday =
@@ -90,32 +82,14 @@ class ExpenseSummary extends StatelessWidget {
         convertDateTimeToString(startOfWeek.add(const Duration(days: 5)));
     String saturday =
         convertDateTimeToString(startOfWeek.add(const Duration(days: 6)));
+
+    // Get today's date in the required format
+    String today = convertDateTimeToString(DateTime.now());
+
     return Consumer<ExpenseData>(
       builder: (context, value, child) => Column(
         children: [
-// hello
-          Container(
-            padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-            alignment: Alignment.topLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Hi!",
-                  style: TextStyle(fontSize: 35, color: Colors.black),
-                ),
-                Text(
-                  "Your Daily Expi",
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                )
-              ],
-            ),
-          ),
-
-          // bar graph
+          // Bar graph
           SizedBox(
             height: 200,
             child: MyBarGraph(
@@ -130,27 +104,136 @@ class ExpenseSummary extends StatelessWidget {
               satAmount: value.calculateDailyExpenseSummary()[saturday] ?? 0,
             ),
           ),
+          const SizedBox(height: 10),
 
-          // weekly summary
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 5, 10, 0),
-            child: Row(
-              children: [
-                Text(
-                  'Week Total: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                Text(
-                  '\u{20B9} ' +
-                      caluclateWeekTotal(value, sunday, monday, tuesday,
-                          wednesday, thursday, friday, saturday),
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
+          // Summary section
+          Row(
+            children: [
+              DataWidget(
+                dataname: "Daily",
+                width: width,
+                today: today,
+                text: value
+                        .calculateDailyExpenseSummary()[today]
+                        ?.toStringAsFixed(2) ??
+                    '0.00',
+              ),
+              const SizedBox(width: 9),
+              DataWidget(
+                dataname: "Weekly",
+                width: width,
+                sunday: sunday,
+                monday: monday,
+                tuesday: tuesday,
+                wednesday: wednesday,
+                thursday: thursday,
+                friday: friday,
+                saturday: saturday,
+                text: value
+                    .caluclateWeekTotal(value, sunday, monday, tuesday,
+                        wednesday, thursday, friday, saturday)
+                    .toString(),
+              ),
+              const SizedBox(width: 9),
+              DataWidget(
+                dataname: "Monthly",
+                width: width,
+                today: today,
+                text: value
+                        .calculateDailyExpenseSummary()[today]
+                        ?.toStringAsFixed(2) ??
+                    '0.00',
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+}
+
+class DataWidget extends StatelessWidget {
+  const DataWidget({
+    super.key,
+    required this.width,
+    this.sunday,
+    this.monday,
+    this.tuesday,
+    this.wednesday,
+    this.thursday,
+    this.friday,
+    this.saturday,
+    this.today,
+    this.text,
+    required this.dataname,
+  });
+
+  final double width;
+  final String? sunday;
+  final String? monday;
+  final String? tuesday;
+  final String? wednesday;
+  final String? thursday;
+  final String? friday;
+  final String? saturday;
+  final String? today;
+  final String? text;
+  final String dataname;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ExpenseData>(builder: (context, value, _) {
+      return InkWell(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const DashboardPage()));
+        },
+        child: Container(
+          height: 90,
+          width: width * 0.30,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.blueAccent,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 20,
+                spreadRadius: 2,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Icon or visual representation
+
+              Text(
+                dataname,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              // const Spacer(),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                '\u{20B9} ${text ?? "0.00"}', // Fallback to "0.00" if text is null
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }
